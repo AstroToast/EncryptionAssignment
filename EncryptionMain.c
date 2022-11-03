@@ -5,6 +5,7 @@ Written by: Nicholas Grigg and Jaccob Pierog
 
 */
 
+
 // how to convert from hexidecimal:
 // let x be a digit and y be the second digit so the num is xy
 // y*16^0 + x*16^1
@@ -14,6 +15,7 @@ Written by: Nicholas Grigg and Jaccob Pierog
 // let x be a digit and y be the second digit so the hexidecimal is xy
 // if y is a letter, convert to the corresponding number 
 // then do y*16^0+x * 16^1
+
 
 #include <stdio.h>
 
