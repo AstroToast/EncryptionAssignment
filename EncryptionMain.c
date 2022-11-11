@@ -22,7 +22,7 @@ Written by: Nicholas Grigg and Jaccob Pierog
 
 int main(int argc, char *argv[]) {
     char *renamefilepointer, renamefilearray[100], inputStream;
-    int fileNameLocation, incryptOrNot, sizeOfFile;
+    int fileNameLocation, encryptOrNot, sizeOfFile;
     FILE *in, *out;
     
 
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
         strcpy(renamefilearray, argv[fileNameLocation]);
         renamefilepointer = strtok(renamefilearray, ".");
         rename(argv[fileNameLocation], strcat(renamefilepointer, ".txt"));
-        incryptOrNot = 0;
+        encryptOrNot = 0;
 
 
     } else { // encrypt
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
             fileNameLocation = 1;
         }
         strcpy(renamefilearray, argv[fileNameLocation]);
-        incryptOrNot = 1;
+        encryptOrNot = 1;
     }
 
     in = fopen(renamefilepointer, "r");
@@ -53,13 +53,27 @@ int main(int argc, char *argv[]) {
     
 
 
-    if (!incryptOrNot) { // decrypt
+    if (!encryptOrNot) { // decrypt
 
-        
+        while (1) {
+        inputStream = fgetc(in);
+        if (inputStream == EOF) {
+            break;
+        }
+        // decrypt(inputStream);
+        // need to write what is returned to the file
+    }
 
 
-    } else { // incrypt
-
+    } else { // encrypt
+        while (1) {
+        inputStream = fgetc(in);
+        if (inputStream == EOF) {
+            break;
+        }
+        // decrypt(inputStream);
+        // need to write what is returned to the file
+        }
     }
 
 
@@ -67,7 +81,7 @@ int main(int argc, char *argv[]) {
     fclose(in);
     fclose(out);
     
-    if (!incryptOrNot) { // decrypt
+    if (!encryptOrNot) { // decrypt
         rename("tempFile.txt", renamefilearray);
     } else { // incrypt
         renamefilepointer = strtok(renamefilearray, ".");
