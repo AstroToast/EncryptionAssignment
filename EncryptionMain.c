@@ -21,29 +21,58 @@ Written by: Nicholas Grigg and Jaccob Pierog
 
 
 int main(int argc, char *argv[]) {
-    char *renamefilepointer, renamefilearray[100];
-    int decryptlocation;
+    char *renamefilepointer, renamefilearray[100], inputStream;
+    int fileNameLocation, incryptOrNot, sizeOfFile;
+    FILE *in, *out;
+    
+
     if (strstr(argv[1], "-d") != NULL|| strstr(argv[2], "-d") != NULL) { // decrypting
         if (strstr(argv[1], "-d") == NULL) {
-            decryptlocation = 1;
+            fileNameLocation = 1;
         } else {
-            decryptlocation = 2;
+            fileNameLocation = 2;
         }
-        strcpy(renamefilearray, argv[decryptlocation]);
+        strcpy(renamefilearray, argv[fileNameLocation]);
         renamefilepointer = strtok(renamefilearray, ".");
-        rename(argv[decryptlocation], strcat(renamefilepointer, ".txt"));
-
+        rename(argv[fileNameLocation], strcat(renamefilepointer, ".txt"));
+        incryptOrNot = 0;
 
 
     } else { // encrypt
         if (strstr(argv[2], "-e") == NULL) {
-            decryptlocation = 2;
+            fileNameLocation = 2;
         } else {
-            decryptlocation = 1;
+            fileNameLocation = 1;
         }
-        strcpy(renamefilearray, argv[decryptlocation]);
+        strcpy(renamefilearray, argv[fileNameLocation]);
+        incryptOrNot = 1;
+    }
+
+    in = fopen(renamefilepointer, "r");
+    out = fopen("tempFile.txt", "w"); // used to tempererarely write to and then will be renamed to replace the in file
+    
+
+
+    if (!incryptOrNot) { // decrypt
+
+        
+
+
+    } else { // incrypt
+
+    }
+
+
+
+    fclose(in);
+    fclose(out);
+    
+    if (!incryptOrNot) { // decrypt
+        rename("tempFile.txt", renamefilearray);
+    } else { // incrypt
         renamefilepointer = strtok(renamefilearray, ".");
-        rename(argv[decryptlocation], strcat(renamefilepointer, ".txt"));
+        rename(argv[fileNameLocation], strcat(renamefilepointer, ".crp"));
+        remove(argv[fileNameLocation]); // deletes the .txt file
     }
 
     return 0;
