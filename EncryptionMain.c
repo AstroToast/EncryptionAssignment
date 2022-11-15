@@ -19,11 +19,12 @@ Written by: Nicholas Grigg and Jaccob Pierog
 #include <stdio.h>
 #include <string.h>
 char* encrypt(char);
+char decrypt(char[]);
 
 
 int main(int argc, char *argv[]) {
     
-    char *renamefilepointer, renamefilearray[100], inputStream, *temp;
+    char *renamefilepointer, renamefilearray[100], inputStreamEn, *temp, inputStreamDe[2];
     int fileNameLocation, encryptOrNot, sizeOfFile, EnDeLocation;
     FILE *in, *out;
     
@@ -74,13 +75,22 @@ int main(int argc, char *argv[]) {
 
         while (1) {
         
-        inputStream = fgetc(in);
-        if (inputStream == EOF) {
+        inputStreamDe[0] = fgetc(in);
+        
+        if (inputStreamDe[0] == EOF) {
             break;
+        } else if (inputStreamDe[0] == '\n') {
+            fprintf(out, "\n");
+            continue;
         }
         
-        // decrypt(inputStream);
-        // need to write what is returned to the file
+
+        inputStreamDe[1] = fgetc(in);
+
+
+
+        fprintf(out, "%c", decrypt(inputStreamDe));
+        
     }
 
 
@@ -88,14 +98,16 @@ int main(int argc, char *argv[]) {
         while (1) {
             
         
-        inputStream = fgetc(in);
+        inputStreamEn = fgetc(in);
         
         
-        if (inputStream == EOF) {
+        if (inputStreamEn == EOF) {
             break;
-        } else 
+        } else if (inputStreamEn == '\n') {
+            fprintf(out, "%c", '\n');
+        }
 
-        temp = encrypt(inputStream);
+        temp = encrypt(inputStreamEn);
         fprintf(out, "%c%c", temp[0], temp[1]);
         }
     }
@@ -105,7 +117,9 @@ int main(int argc, char *argv[]) {
     fclose(in);
     fclose(out);
     if (!encryptOrNot) { // decrypt
-        rename("tempFile.txt", renamefilearray);
+        renamefilepointer = strtok(renamefilearray, ".");
+        remove(argv[fileNameLocation]);
+        rename("tempFile.txt", strcat(renamefilepointer, ".txt"));
     } else { // encrypt
         renamefilepointer = strtok(renamefilearray, ".");
         remove(argv[fileNameLocation]);
@@ -127,8 +141,6 @@ char* encrypt(char input){
 
     if (input == 9) {
         return "TT";
-    } else if (input == '\n') {
-        return "\n";
     } else {
         holder = input-16;
         
@@ -150,4 +162,31 @@ char* encrypt(char input){
     }
     return item;
     
+}
+
+char decrypt(char input[2]){ 
+    char tester; 
+    int x, y, outChar = 0;
+
+
+    if (input[0] == 'T' && input[1] == 'T'){
+        return('\t'); 
+    } else{
+    
+        if (input[1] >57) {
+            y = input[1]-55;
+        } else {
+            y = input[1] - 48;
+        }
+    
+        x = input[0] - 48;
+        outChar = ((x * 16) + y) + 16;
+        if(outChar > 127){
+            outChar = ((outChar - 144) + 32);
+            return outChar;
+        }
+        else{
+        return outChar;
+        }
+    }
 }
