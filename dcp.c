@@ -3,37 +3,39 @@
 #include <string.h>
 
 int main(char ivalue){ 
-char decrypt[2], evalue; 
-char x=6, y='A';
+char decrypt[2], evalue, tester; 
+int x = 8, y = 1, outChar = 0;
+
 
 decrypt[0] = x;
 decrypt[1] = y;
 if (x == 'T' && y == 'T'){
     printf("\t"); //printf will become return
 }
+else if ((x == 1 && y == 0) || (x== 1 && y == 3)){
+    printf("\n");
+}
 else{
 if (y == 'A'){
-    y = -6;
+    y = 10;
 }else if (y == 'B'){
-    y = -5;
+    y = 11;
 }else if (y == 'C'){
-    y = -4;
+    y = 12;
 }else if (y == 'D'){
-    y = -3;
+    y = 13;
 }else if (y == 'E'){
-    y = -2;
+    y = 14;
 }else if (y == 'F'){
-    y = -1;
+    y = 15;
 }
-printf("x = %d\n", x);
-printf("y = %d\n", y);
-evalue = ((x*16) + y);
-evalue += 16;
-printf("e val = %d which is %d x + %d y\n", evalue, x, y);
-if(evalue > 127){
-evalue = (evalue - 144) + 32;
+outChar = ((x * 16) + y) + 16;
+if(outChar > 127){
+outChar = ((outChar - 144) + 32);
+printf("'%c'", outChar);
 }
-printf("%c", evalue);
+else{
+    printf("'%c'", outChar);
 }
-//return 0;
+}
 }
