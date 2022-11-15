@@ -22,52 +22,63 @@ char* encrypt(char);
 
 
 int main(int argc, char *argv[]) {
-    char *renamefilepointer, renamefilearray[100], inputStream;
-    int fileNameLocation, encryptOrNot, sizeOfFile;
+    
+    char *renamefilepointer, renamefilearray[100], inputStream, *temp;
+    int fileNameLocation, encryptOrNot, sizeOfFile, EnDeLocation;
     FILE *in, *out;
     
     
-    if (argc-1) {
+    
+    if (argc == 2) {
         fileNameLocation = 1;
+        encryptOrNot = 1;
     } else {
+        encryptOrNot = 0;
         if (strstr(argv[1], "-") == NULL) {
             fileNameLocation = 1;
+            EnDeLocation = 2;
         } else {
             fileNameLocation = 2;
+            EnDeLocation = 1;
         }
     }
 
-    printf("%i\n", fileNameLocation);
+    strcpy(renamefilearray, argv[fileNameLocation]);
+    
+    if (!encryptOrNot && strstr(argv[EnDeLocation], "-d") != NULL) { // decrypting
+    
 
-
-    if (strstr(argv[1], "-d") != NULL|| ((argc > 0) && (strstr(argv[2], "-d") != NULL))) { // decrypting
-    printf("decrypting \n");
         
-        strcpy(renamefilearray, argv[fileNameLocation]);
-        renamefilepointer = strtok(renamefilearray, ".");
-        rename(argv[fileNameLocation], strcat(renamefilepointer, ".txt"));
         encryptOrNot = 0;
 
-
+    
     } else { // encrypt
-    printf("Here \n");
-        strcpy(renamefilearray, argv[fileNameLocation]);
         encryptOrNot = 1;
     }
-
     
-    in = fopen(renamefilepointer, "r");
+    
+    in = fopen(argv[fileNameLocation], "r");
+    if (in == NULL) {
+        printf("The given file doesn't exist \n");
+        fclose(in);
+        fclose(out);
+        remove("tempFile.txt");
+        return 0;
+    }
+    
+
     out = fopen("tempFile.txt", "w"); // used to tempererarely write to and then will be renamed to replace the in file
+
     
-
-
     if (!encryptOrNot) { // decrypt
 
         while (1) {
+        
         inputStream = fgetc(in);
         if (inputStream == EOF) {
             break;
         }
+        
         // decrypt(inputStream);
         // need to write what is returned to the file
     }
@@ -75,11 +86,17 @@ int main(int argc, char *argv[]) {
 
     } else { // encrypt
         while (1) {
+            
+        
         inputStream = fgetc(in);
+        
+        
         if (inputStream == EOF) {
             break;
-        }
-        fprintf(out, "%s", encrypt(fgetc(in)));
+        } else 
+
+        temp = encrypt(inputStream);
+        fprintf(out, "%c%c", temp[0], temp[1]);
         }
     }
 
@@ -87,13 +104,13 @@ int main(int argc, char *argv[]) {
 
     fclose(in);
     fclose(out);
-    
     if (!encryptOrNot) { // decrypt
         rename("tempFile.txt", renamefilearray);
-    } else { // incrypt
+    } else { // encrypt
         renamefilepointer = strtok(renamefilearray, ".");
-        rename(argv[fileNameLocation], strcat(renamefilepointer, ".crp"));
-        remove(argv[fileNameLocation]); // deletes the .txt file
+        remove(argv[fileNameLocation]);
+        rename("tempFile.txt", strcat(renamefilepointer, ".crp"));
+        
     }
 
 
@@ -105,21 +122,26 @@ int main(int argc, char *argv[]) {
 char* encrypt(char input){
     char temp[2];
     char *item = temp;
+    int holder;
 
 
     if (input == 9) {
         return "TT";
-    } else if (input == 13) {
+    } else if (input == '\n') {
         return "\n";
     } else {
-        input-=16;
-        if (input<32) {
-            input = (input-32 + 144);
+        holder = input-16;
+        
+        if (holder<32) {
+            holder = (holder + 112);
         }
-        temp[0] = input/16 + 48;
-        temp[1] = input%16;
+        
+        temp[0] = holder/16 + 48;
+        
+        temp[1] = holder%16;
         if (temp[1] > 9) {
             temp[1]+=55;
+            
         } else {
             temp[1] +=48;
         }
