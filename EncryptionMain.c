@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
         encryptOrNot = 1;
     } else {
         encryptOrNot = 0;
-        if (strstr(argv[1], "-") == NULL) {
+        if (strstr(argv[1], "-D") == NULL) {
             fileNameLocation = 1;
             EnDeLocation = 2;
         } else {
@@ -46,13 +46,10 @@ int main(int argc, char *argv[]) {
 
     strcpy(renamefilearray, argv[fileNameLocation]);
     
-    if (!encryptOrNot && strstr(argv[EnDeLocation], "-d") != NULL) { // decrypting
-    
+    if (!encryptOrNot && strstr(argv[EnDeLocation], "-D") != NULL) { // decrypting
 
-        
         encryptOrNot = 0;
 
-    
     } else { // encrypt
         encryptOrNot = 1;
     }
@@ -62,8 +59,6 @@ int main(int argc, char *argv[]) {
     if (in == NULL) {
         printf("The given file doesn't exist \n");
         fclose(in);
-        fclose(out);
-        remove("tempFile.txt");
         return 0;
     }
     
@@ -83,12 +78,8 @@ int main(int argc, char *argv[]) {
             fprintf(out, "\n");
             continue;
         }
-        
 
         inputStreamDe[1] = fgetc(in);
-
-
-
         fprintf(out, "%c", decrypt(inputStreamDe));
         
     }
@@ -105,6 +96,7 @@ int main(int argc, char *argv[]) {
             break;
         } else if (inputStreamEn == '\n') {
             fprintf(out, "%c", '\n');
+            continue;
         }
 
         temp = encrypt(inputStreamEn);
@@ -137,7 +129,6 @@ char* encrypt(char input){
     char temp[2];
     char *item = temp;
     int holder;
-
 
     if (input == 9) {
         return "TT";
@@ -180,13 +171,14 @@ char decrypt(char input[2]){
         }
     
         x = input[0] - 48;
+
         outChar = ((x * 16) + y) + 16;
         if(outChar > 127){
             outChar = ((outChar - 144) + 32);
             return outChar;
         }
         else{
-        return outChar;
+            return outChar;
         }
     }
 }
