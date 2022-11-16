@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     strcpy(renamefilearray, argv[fileNameLocation]);
     
-    if (!encryptOrNot && strstr(argv[EnDeLocation], "-d") != NULL) { // decrypting
+    if (!encryptOrNot && strstr(argv[EnDeLocation], "-D") != NULL) { // decrypting
 
         encryptOrNot = 0;
 
