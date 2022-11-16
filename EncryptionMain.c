@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
         encryptOrNot = 1;
     } else {
         encryptOrNot = 0;
-        if (strstr(argv[1], "-") == NULL) {
+        if (strstr(argv[1], "-D") == NULL) {
             fileNameLocation = 1;
             EnDeLocation = 2;
         } else {
