@@ -1,0 +1,117 @@
+Main function (Take user input){
+    Declare variables
+    if 2 inputs were given {
+        set that the only input given was the file name
+        set to encryption mode
+    } else {
+        set encrypt to false for now
+        if the first part of user input has -D {
+            set the file name location to 2
+        } else {
+            set file name location to 1
+        }
+    }
+
+    copy the user input file name to a new variable
+
+    if we didn't set encryption to true, and the user input doesn't say -D at the location that isn't the file name {
+        set to decrypt
+    } else {
+        set to encrypt
+    }
+
+    open the file that was given
+    if the file didn't open {
+        say the file didn't open in console
+        close the file in case something went wrong and it somehow did
+        end the program
+    }
+
+    create a new file that we will write to called "temp.txt"
+
+    if decrypting {
+        while true {
+            read 1 character
+            if that character is the end of file {
+                break from the while loop
+            }
+            otherwise if that character is a new line character {
+    print the new line character to the output file then return to the while loop        }
+            otherwise read the next character to a new variable
+            then pass those two characters to the decrypt function and print the output
+        }
+    } otherwise we are encrypting {
+        while true {
+
+            read one character
+            if it's the end of the file {
+                break from the while loop
+            } else if it's the new line character {
+                print the new line character to the output file then return to the while loop
+            }
+            pass the encrypt function 1 character and store the 2 returned characters in temp
+            print both characters to the out file
+        }
+    }
+
+    everything will be encrypted now or decrypted
+    close both the input and output file
+    if we decrypted {
+        create a pointer to the input file name at the . or at the end of the file if there is no .
+        delete the input file from the computer
+        rename the temp file to the pointer created above + .txt
+    } otherwise {
+        create a pointer to the input file name at the . or at the end of the file if there is no .
+        delete the input file from the computer
+        rename the temp file to the pointer created above + .crp
+    }
+    end the program
+}
+
+functions: 
+
+encryption (taking in one character){
+    declare local variables needed for this function
+    if the input is the tab character {
+        return "TT"
+    } else {
+        subtract 16 from the ascii value of the input character
+        if the new value is less then 32 {
+            add 112 to it
+        }
+        then convert to hexadecimal by dividing by 16 for the first character and shifting it along ascii by 48
+        then take the remainder and store it as the second value
+        if the second value is greater then 9 {
+            add 55 to shift it to the A-F characters
+        } else {
+            add 48 to shift it to the numerical characters in ascii
+        }
+        return both characters as a string pointer
+        
+    }
+}
+
+decryption (take in 2 characters) {
+    declare local variables needed for this function
+    if the input is TT {
+        return a tab character
+    } else {
+        if the second character input is grteater then 57 in ascii { // this means it'll be A-F as a character and therefore needs to be 10-15 as a number
+            subtract 55 from it
+
+        } else { \\ it's a number that's 0-9
+            subtract 48 from it
+        }
+
+        then subtract 48 from the first character
+
+        to convert back multiply the first character by 16 and add it to the second character \\ this ocnverts back from hexadecimal
+        then add 16 to it
+
+        if the number is greater then 127 {
+            subtract 144 then add 32 and return that value as a character
+        } else {
+            return the calculated value as a character 
+        }
+    }
+}
